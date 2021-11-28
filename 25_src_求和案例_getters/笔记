@@ -1,0 +1,43 @@
+actions、mutations、state 是 {}
+store管理它们三个
+
+步骤：
+1、安装vuex:  npm i vuex
+2、Vue.use(Vuex)
+3、store
+4、vue components看得见store
+
+开发中看到src下面有store文件夹 ==> 这个项目使用vuex
+业务逻辑写在actions
+
+这里只是用了index.js , Count.vue
+在index.js引入并使用vuex
+
+getters的使用
+<h3>当前求和放大10倍为：{{$store.getters.bigSum}}</h3>
+ <h3>当前求和放大10倍为：{{$store.state.sum*10}}</h3>
+=====================================
+  ### 5.getters的使用(逻辑复杂时候使用）
+
+  1. 概念：当state中的数据需要经过加工后再使用时，可以使用getters加工。
+
+  2. 在```store.js```中追加```getters```配置
+
+     ```js
+     ......
+
+     const getters = {
+     	bigSum(state){
+     		return state.sum * 10
+     	}
+     }
+
+     //创建并暴露store
+     export default new Vuex.Store({
+     	......
+     	getters
+     })
+     ```
+
+  3. 组件中读取数据：```$store.getters.bigSum```
+

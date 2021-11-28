@@ -1,0 +1,8 @@
+vue-resource不常用
+
+安装vue-resource
+npm i vue-resource
+
+main.js里面
+ //引入vueResource插件
+ import vueResource from 'vue-resource'

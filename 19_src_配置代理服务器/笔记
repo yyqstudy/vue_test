@@ -1,0 +1,117 @@
+发送Ajax请求
+开两个服务器：
+   http://localhost:5000/students
+   http://localhost:5001/cars
+下载axios
+在终端： npm i axios
+
+引入axios: import axios from 'axios'
+
+
+
+console出现错误：CORS policy: No 'Access-Control-Allow-Origin'
+http localhost 8080
+http localhost 5000
+表示跨域了（端口号不同）跨域只是浏览器拿到信息了但是不给你
+
+解决方法：
+1、cors(携带特殊响应头）--后端配置
+2、jsonp script src 前后端都要配置，只能解决get请求
+3、配置一个端口号是8080的代理服务器（常用）-- 1、后端nginx  2、vue-cli脚手架
+   服务器之间通信不需要ajax，只是简单的HTTP协议,客户端（浏览器）和服务器通信才需要Ajax
+
+  devServer.proxy：如果你的前端应用和后端 API 服务器没有运行在同一个主机上，你需要在开发环境下将 API 请求代理到 API 服务器
+
+   vue-cli脚手架配置
+
+   在vue.config.js
+                     //开启代理服务器，只能配置一个（不太完美）
+                      devServer: {
+                          //请求转发给端口号是5000的服务器
+                          proxy: 'http://localhost:5000'
+                      }
+
+   在App.vue
+
+                       axios.get(' http://localhost:8080/students').then(
+                        response => {
+                            //response 是对象，response.data才是服务器传送的数据
+                            console.log('请求成功！',response.data)
+                        },
+                        error =>{
+                            //error 是对象，error.message是失败的原因
+                            console.log('请求失败！',error.message)
+                        }
+
+   当浏览器需要的信息代理服务器自身也有，就不会请求转发给服务器5000
+    devServer: {
+           proxy: {
+               //想走代理时候，请求前缀前面加上 /api
+               '/api': {
+                   target: 'http://localhost:5000',
+                   //代理服务器拿到url转发给服务器5000时候是‘/students’而不是‘ /api/students’
+                   pathRewrite:{'^/api':''},
+               },
+           }
+       }
+
+         在App.vue
+        axios.get(' http://localhost:8080/api/students').then()
+
+
+   注意：vue.config.js修改了，要重新启动脚手架
+          npm run serve
+
+
+
+=====================================
+## vue脚手架配置代理
+
+ ### 方法一
+
+ ​	在vue.config.js中添加如下配置：
+
+ ```js
+ devServer:{
+   proxy:"http://localhost:5000"
+ }
+ ```
+
+ 说明：
+
+ 1. 优点：配置简单，请求资源时直接发给前端（8080）即可。
+ 2. 缺点：不能配置多个代理，不能灵活的控制请求是否走代理。
+ 3. 工作方式：若按照上述配置代理，当请求了前端不存在的资源时，那么该请求会转发给服务器 （优先匹配前端资源）
+
+ ### 方法二
+
+ ​	编写vue.config.js配置具体代理规则：
+
+ ```js
+ module.exports = {
+ 	devServer: {
+       proxy: {
+       '/api1': {// 匹配所有以 '/api1'开头的请求路径
+         target: 'http://localhost:5000',// 代理目标的基础路径
+         changeOrigin: true,
+         pathRewrite: {'^/api1': ''}
+       },
+       '/api2': {// 匹配所有以 '/api2'开头的请求路径
+         target: 'http://localhost:5001',// 代理目标的基础路径
+         changeOrigin: true,
+         pathRewrite: {'^/api2': ''}
+       }
+     }
+   }
+ }
+ /*
+    changeOrigin设置为true时，服务器收到的请求头中的host为：localhost:5000
+    changeOrigin设置为false时，服务器收到的请求头中的host为：localhost:8080
+    changeOrigin默认值为true
+ */
+ ```
+
+ 说明：
+
+ 1. 优点：可以配置多个代理，且可以灵活的控制请求是否走代理。
+ 2. 缺点：配置略微繁琐，请求资源时必须加前缀。

@@ -1,0 +1,74 @@
+实现编辑功能
+
+
+App组件：配置编辑按钮样式
+在todo追加一个属性 todo.isEdit 当它为true，todo.title就变成页面数据；当它为false，就弹出框修改
+
+
+MyItem组件： @click="handleEdit(todo)"
+      1、  <button v-show="!todo.isEdit" class="btn btn-edit"  @click="handleEdit(todo)">编辑</button>
+
+       2、
+                  <span v-show="!todo.isEdit">{{todo.title}}</span>
+                   <input
+                           v-show="todo.isEdit"
+                           type="text"
+                           :value="todo.title"
+                           @blur="handleBlur(todo,$event)"
+                   >
+
+       3、
+                  //编辑
+                   handleEdit(todo){
+                       //如果todo已经有isEdit属性，就不要追加
+                       // eslint-disable-next-line no-prototype-builtins
+                       if(todo.hasOwnProperty('isEdit')){
+                           todo.isEdit = true
+                       }else{
+                           //给todo追加属性isEdit(这样有对应的get和set）
+                           this.$set(todo,'isEdit',true)
+                       }
+                   },
+
+       4、input框的内容什么时候显示成页面数据？
+          需求：当文字失去焦点的时候，变成正常文字
+          给input框绑定失去焦点事件  @blur="handleBlur"
+
+                     //失去焦点回调（真正执行修改逻辑）
+                      handleBlur(todo,e){
+                          todo.isEdit = false
+                          //如果input框编辑没内容
+                          if(!e.target.value.trim())return alert('输入不能为空')
+                          this.$bus.$emit('updatTodo',todo.id,e.target.value)
+                      }
+
+
+       5、传给App组件
+       在mounted里面
+                 //绑定编辑事件updatTodo
+                 this.$bus.$on('updatTodo',this.updatTodo)
+
+                 //解绑
+                  this.$bus.$off('updatTodo')
+
+
+                  //编辑（更新一个todo)
+                   updatTodo(id,title){
+                       this.todos.forEach((todo)=>{
+                           //如果id一样，就把todo.title改成你传过来的title
+                           if(todo.id === id) todo.title= title
+                       })
+                   },
+
+ ## nextTick
+
+ 1. 语法：```this.$nextTick(回调函数)```
+ 2. 作用：在下一次 DOM 更新结束后执行其指定的回调。
+ 3. 什么时候用：当改变数据后，要基于更新后的新DOM进行某些操作时，要在nextTick所指定的回调函数中执行。
+
+
+                //点击编辑按钮，给编辑后的数据获取焦点
+                //$nextTick在下一次 DOM 更新结束后执行其指定的回调函数。
+                this.$nextTick(function (){
+                    this.$refs.inputTitle.focus()
+                } )

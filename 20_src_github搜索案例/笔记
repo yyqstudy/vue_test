@@ -1,0 +1,52 @@
+ ## 总结github案例
+
+第一步：静态组件
+
+ 引入第三方样式
+
+第一种方法（报错）：
+第三方样式要放在公共位置assets（在src下面新建）里面的css文件夹，不能放在App.vue
+然后在App.vue引入   import './assets/css/bootstrap.css'
+但是报错，因为用到不存在的资源
+Module not found: Error: Can't resolve '../fonts/glyphicons-halflings-regular.eot' in 'C:\Users\dev3\Desktop\vue_test\src\assets\css'
+
+第二种方法：
+在public下面新建css文件夹，把bootstrap.css放进去
+接着在public下面index.html引入
+  <link rel="stylesheet" href="<%= BASE_URL %>css/bootstrap.css">
+
+
+拆分组件 App组件拆分Search组件和List组件
+----------------------------------------
+第二步：动态组件
+
+数据交给哪一个组件 ==》List组件
+数据哪里获取 ==》 Search组件（提供一个接口地址,这个接口地址已经用cors解决跨域问题）
+
+ Search组件和List组件之间进行通信：全局事件总线
+ Search组件：提供数据
+ List组件：接收数据
+
+
+ 页面列表需要数据的哪些属性：
+ avatar_url(头像）；html_url（用户的GitHub地址）；login
+ 都在List组件里面的<div>动态获取
+
+===================================
+完善案例
+
+List组件里面：
+  1、welcome
+  2、loading
+  3、users
+  4、error
+
+  数据驱动页面展示，所以要设置一个数据，确定什么时候展示上述List组件里面的哪一个
+
+      isFirst:true,
+      isLoading:false,
+      errMsg:'',
+      users:[]
+
+点击搜索按钮之后，上面四个属性的变化 ===》听从Search组件
+

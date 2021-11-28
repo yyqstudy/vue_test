@@ -1,0 +1,98 @@
+默认是<router-link>```的push属性
+需求：开启 <router-link>的replace属性
+1、在App.vue组件: :replace="true" 或者 replace，效果一样
+
+=========================================
+ ### 8.```<router-link>```的replace属性
+
+  1. 作用：控制路由跳转时操作浏览器历史记录的模式
+  2. 浏览器的历史记录有两种写入方式：分别为```push```和```replace```，```push```是追加历史记录，```replace```是替换当前记录。路由跳转时候默认为```push```
+  3. 如何开启```replace```模式：```<router-link replace .......>News</router-link>```
+
+=========================================
+* Message组件向Detail组件传递参数
+
+很多参数时候就要用props配置
+1、在index.jsp
+谁接收参数，就把props配置写在谁身上
+2、Detail.vue用props配置接收
+
+
+=========================================
+路由的params参数
+
+1、Message.vue
+params参数
+:to="`/home/message/detail/666/hello`"
+query传递参数
+to="/home/message/detail?id=666&title=hello"
+
+2、 index.jsp
+   path: 'detail/:id/:title',
+
+3、Detail.vue
+ 从$route中params属性接收参数
+   <li>消息编号：{{$route.params.id}}</li>
+
+
+ 坑！！！    > 特别注意：路由携带params参数时，若使用to的对象写法，则不能使用path配置项，必须使用name配置！
+================================
+命名路由
+1、route文件夹里面index.jsp里面给About和Detail命名
+2、好处：可以简化路由的跳转。
+3、回到Message.vue，有了名字，就不用写path
+==================================
+query传递参数
+to="/home/message/detail?id=666&title=hello"
+
+包含三级路由
+1、Message组件，遍历谁<ul>里面有一堆<li>，就遍历它，在后面加上v-for
+2、新的导航区和展示区出现，用路由组件Detail.vue
+3、需求：点击消息001还是消息002，跳转路径都是一样：/home/message/detail
+4、在Message.vue发送参数（形式和jQuery一样），
+   在Detail.vue接收参数（使用$route.query.XXX）
+
+==================================
+嵌套（多级）路由
+1、先写好Message组件和News组件，放在pages文件夹内
+2、在route里面的index.js配置 子路由规则
+3、回到Home组件:  跳转（要写完整路径）
+
+==================================
+
+
+安装 npm i vue-router
+
+1、在main.js
+
+//引入路由
+import VueRouter from 'vue-router'
+//应用路由插件
+Vue.use(VueRouter)
+
+
+2、创建router文件夹，里面创建index.js(专门用于创建整个应用的路由器)
+可以使用router属性
+
+3、回到main.js
+   //引入路由器
+   import router from './router'
+
+4、App.vue
+
+   <router-link>标签实现路由的切换
+   跳转不用href而是用to, active-class点击时候会高亮
+   实现效果，点击导航栏，上面的网址会改变，比如
+   点击Home ==> http://localhost:8080/#/home
+
+   指定组件的呈现位置
+   <router-view></router-view>
+
+二、
+把顶部区域变成一个组件---Banner.vue(一般组件）
+
+文件夹pages：放路由组件
+文件夹components: 放一般组件
+
+不用的路由组件：被销毁了
+==========================================

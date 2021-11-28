@@ -1,0 +1,25 @@
+父组件 =====> 子组件 ：props
+子组件 =====> 父组件:
+       (1)父组件先给子组件一个函数，然后通过props
+       (2)自定义事件
+      （3）全局事件总线
+
+
+全局事件总线
+ 本质是自定义事件，给$bus（图中的x，F12开发者工具的<Root>)绑定
+
+***这里适合全局事件总线的是：
+ MyItem.vue 和 App.vue
+
+之前的写法：
+ App组件把checkTodo，deleteTodo传给MyList组件，然后MyList组件把这些传给MyItem组件
+现在直接：
+ MyItem组件直接把checkTodo，deleteTodo传给App组件
+
+ 第一步：
+ 在main.js 上
+ beforeCreate() {
+        Vue.prototype.$bus = this //安装全局事件总线
+    }
+
+ 第二步： MyItem组件直接把勾选或者取消勾选和删除的id传给App组件

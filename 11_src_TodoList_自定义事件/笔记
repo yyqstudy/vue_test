@@ -1,0 +1,11 @@
+子组件 ===> 父组件
+父：App
+子组件：MyFooter, MyHeader
+
+父组件给子组件传递函数的地方都可以改成自定义事件
+<MyFooter :todos="todos" :checkAllTodo=" checkAllTodo" :clearAllTodo="clearAllTodo" />
+
+     :checkAllTodo=" checkAllTodo" :clearAllTodo="clearAllTodo"  是函数
+改成
+
+<MyFooter :todos="todos" @checkAllTodo=" checkAllTodo" @clearAllTodo="clearAllTodo" />

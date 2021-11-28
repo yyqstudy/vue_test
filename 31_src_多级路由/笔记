@@ -1,0 +1,74 @@
+1、先写好Message组件和News组件，放在pages文件夹内
+2、在route里面的index.js配置 子路由规则
+3、回到Home组件:  跳转（要写完整路径）
+
+==================================
+### 3.多级路由（多级路由）
+
+ 1. 配置子级路由规则，使用children配置项：
+
+    ```js
+    routes:[
+    	{
+    		path:'/about',
+    		component:About,
+    	},
+    	{
+    		path:'/home',
+    		component:Home,
+    		children:[ //通过children配置子级路由
+    			{
+    				path:'news', //此处一定不要写：/news
+    				component:News
+    			},
+    			{
+    				path:'message',//此处一定不要写：/message
+    				component:Message
+    			}
+    		]
+    	}
+    ]
+    ```
+
+ 2. 跳转（要写完整路径）：
+
+    ```vue
+    <router-link to="/home/news">News</router-link>
+    ```
+=========================================
+
+安装 npm i vue-router
+
+1、在main.js
+
+//引入路由
+import VueRouter from 'vue-router'
+//应用路由插件
+Vue.use(VueRouter)
+
+
+2、创建router文件夹，里面创建index.js(专门用于创建整个应用的路由器)
+可以使用router属性
+
+3、回到main.js
+   //引入路由器
+   import router from './router'
+
+4、App.vue
+
+   <router-link>标签实现路由的切换
+   跳转不用href而是用to, active-class点击时候会高亮
+   实现效果，点击导航栏，上面的网址会改变，比如
+   点击Home ==> http://localhost:8080/#/home
+
+   指定组件的呈现位置
+   <router-view></router-view>
+
+二、
+把顶部区域变成一个组件---Banner.vue(一般组件）
+
+文件夹pages：放路由组件
+文件夹components: 放一般组件
+
+不用的路由组件：被销毁了
+==========================================

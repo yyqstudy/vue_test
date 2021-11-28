@@ -1,0 +1,15 @@
+需求：
+添加和删除之前有动画效果
+在MyItem.vue
+谁在变 ==》 每一个todo 对整个  <li >  <li />加动画效果
+
+或者
+在MyList.vue
+对
+  <transition-group name="todo" appear>
+              <MyItem
+                      v-for="todoObj in todos"
+                      :key="todoObj.id"
+                      :todo="todoObj"
+              />
+    </transition-group>

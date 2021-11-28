@@ -1,0 +1,91 @@
+模块化+命名空间
+将vuex里面的四个操作归类划分为 person.js和count.js
+   开启命名空间 namespaced:true,
+在person.vue和count.vue,组件读取数据，注意写法，比如：要明确哪一个里面的getters
+  如果不会写，在mounted里面console.log(this.$store),F12在控制台看看里面的写法
+=================================
+ ### 7.模块化+命名空间
+
+ 1. 目的：让代码更好维护，让多种数据分类更加明确。
+
+ 2. 修改```store.js```
+
+    ```javascript
+    const countAbout = {
+      namespaced:true,//开启命名空间
+      state:{x:1},
+      mutations: { ... },
+      actions: { ... },
+      getters: {
+        bigSum(state){
+           return state.sum * 10
+        }
+      }
+    }
+
+    const personAbout = {
+      namespaced:true,//开启命名空间
+      state:{ ... },
+      mutations: { ... },
+      actions: { ... }
+    }
+
+    const store = new Vuex.Store({
+      modules: {
+        countAbout,
+        personAbout
+      }
+    })
+    ```
+
+ 3. 开启命名空间后，组件中读取state数据：
+
+    ```js
+    //方式一：自己直接读取
+    this.$store.state.personAbout.list
+    //方式二：借助mapState读取：
+    ...mapState('countAbout',['sum','school','subject']),
+    ```
+
+ 4. 开启命名空间后，组件中读取getters数据：
+
+    ```js
+    //方式一：自己直接读取
+    this.$store.getters['personAbout/firstPersonName']
+    //方式二：借助mapGetters读取：
+    ...mapGetters('countAbout',['bigSum'])
+    ```
+
+ 5. 开启命名空间后，组件中调用dispatch
+
+    ```js
+    //方式一：自己直接dispatch
+    this.$store.dispatch('personAbout/addPersonWang',person)
+    //方式二：借助mapActions：
+    ...mapActions('countAbout',{incrementOdd:'jiaOdd',incrementWait:'jiaWait'})
+    ```
+
+ 6. 开启命名空间后，组件中调用commit
+
+    ```js
+    //方式一：自己直接commit
+    this.$store.commit('personAbout/ADD_PERSON',person)
+    //方式二：借助mapMutations：
+    ...mapMutations('countAbout',{increment:'JIA',decrement:'JIAN'}),
+    ```
+
+==================================
+actions、mutations、state 是 {}
+store管理它们三个
+
+步骤：
+1、安装vuex:  npm i vuex
+2、Vue.use(Vuex)
+3、store
+4、vue components看得见store
+
+开发中看到src下面有store文件夹 ==> 这个项目使用vuex
+业务逻辑写在actions
+
+这里只是用了index.js , Count.vue
+在index.js引入并使用vuex
